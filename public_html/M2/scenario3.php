@@ -35,6 +35,27 @@ function bePositive($arr, $arrayNumber)
     // Step 3: Find absoulte value of element
     // Step 4: Cast back to original type if needed and assign to slot in $output
 
+    for ($i = 0; $i < $arr[$i]; $i++) {
+        $element = $arr[$i];
+
+        if (is_int($element)) {
+            $output[$i] = abs($element);
+        }
+        elseif (is_float($element)) {
+            $output[$i] = abs($element);
+        }
+        elseif (is_string($element)) {
+            if(strpos($element, '.') != false) {
+                $num = abs((float)($element));
+                $output[$i] = abs($element);
+            }
+            else {
+                $num = abs((int)($element));
+                $output[$i] = abs($element);
+            }
+        }
+    }
+
 
     // End Solution Edits
     printScenario3Output($output);
