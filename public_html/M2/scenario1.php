@@ -32,7 +32,7 @@ function printOdds($arr, $arrayNumber)
 
     // Step 1: Use a for loop to iterate through $arr
     // Step 2: Using an if-statement, determine whether the number is odd
-    // Step 3: Append odd numbers to $output_result, seperated by a comma and space
+    // Step 3: Append odd numbers to $output_result, making sure to seperate each number with a comma and space
 
 
 
