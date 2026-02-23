@@ -34,7 +34,14 @@ function printOdds($arr, $arrayNumber)
     // Step 2: Using an if-statement, determine whether the number is odd
     // Step 3: Append odd numbers to $output_result, making sure to seperate each number with a comma and space
 
-
+    for ($i = 0; $i < count($arr); $i++) {
+        if ($arr[$i] % 2 != 0) {
+            if ($output_result != "") {
+                $output_result .= ", ";
+            }
+            $output_result .= $arr[$i];
+        }
+    }
 
     // End Solution Edits
     printScenario1Output($output_result);
