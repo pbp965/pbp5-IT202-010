@@ -3,7 +3,7 @@
 // @ts-nocheck
 require_once "base.php";
 
-$ucid = "mt85"; // <-- set your ucid
+$ucid = "pbp5"; // <-- set your ucid
 
 // Don't edit the arrays below, they are used to test your code
 $array1 = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6];
@@ -37,10 +37,14 @@ function sumValues($arr, $arrayNumber)
     // Step 1: Using a for loop iterate through $arr
     // Step 2: Add values within $arr to $total
 
+    for ($i = 0; $i < count($arr); $i++) {
+        $total += $arr[$i];
+    }
 
     // Solve Challenge 2 here: Format to 2 decimal places
     // Step 1: Use number_format to format to 2 decimal places
     $modifiedTotal = "?";
+    $modifiedTotal = number_format($total, 2, '.', '');
 
     // End Solution Edits
     printScenario2Output($total, $modifiedTotal);
