@@ -36,7 +36,7 @@ Requirements:
         </ul>
     </nav>
     <!-- Edit your UCID here -->
-    <header>Header Section (mt85)</header>
+    <header>Header Section (pbp5)</header>
     <!-- Don't make any other edits to the HTML -->
     <div class="container">
         <aside id="left-sidebar">
@@ -97,8 +97,62 @@ Requirements:
 <script>
     /* Solve the button logic here by finding and attaching an appropriate event listener and logic*/
     /* pbp5 03/02/2026 */
+const leftSidebar = document.getElementById("left-sidebar");
+const rightSidebar = document.getElementById("right-sidebar");
+
+const leftButton = leftSidebar.querySelector("button");
+const rightButton = rightSidebar.querySelector("button");
+
+// Toggle left sidebar
+leftButton.addEventListener("click", () => {
+    leftSidebar.classList.toggle("collapsed");
+});
+
+// Toggle right sidebar
+rightButton.addEventListener("click", () => {
+    rightSidebar.classList.toggle("collapsed");
+
+});
 </script>
 
 <style>
     /* You're free to make whatever edits you need here, just don't override anything in the styles.css */
+    body {
+        height: 100%;
+        margin: 0;
+    }
+
+    body.challenge2 {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    header {
+        flex: 0 0 auto;
+    }
+
+    .container {
+        flex: 1;
+        display: flex;
+        overflow: hidden;
+    }
+
+    #left-sidebar,
+    #right-sidebar {
+        flex: 0 0 15%;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #left-sidebar.collapsed,
+    #right-sidebar.collapsed {
+        flex: 0 0 40px; 
+    }
+
+    .content {
+        flex: 1;
+        overflow-y: auto;
+    }
 </style>
