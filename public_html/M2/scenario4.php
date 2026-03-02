@@ -42,6 +42,14 @@ function transformText($arr, $arrayNumber) {
         // Step 3: Trim leading and traling spaces and duplicate spaces
         // Step 4: Assign phrase to 'placeholderForModifiedPhrase'
 
+        $cleaned = preg_replace("/[^a-zA-Z0-9 ]/", "", $text);
+        $cleaned = trim($cleaned);
+        $cleaned = preg_replace("/\s+/", " ", $cleaned);
+        $placeholderForModifiedPhrase = ucwords(strtolower($cleaned));
+        
+
+
+
         // End Solution Edits
     
         printScenario4Transformations($index, $placeholderForModifiedPhrase, $placeholderForMiddleCharacters);
