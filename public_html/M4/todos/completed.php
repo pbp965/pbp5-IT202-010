@@ -18,7 +18,7 @@ $query = "SELECT
             DATE(completed_date) AS completed_date, 
             DATEDIFF(completed_date, due) AS days_offset, 
             assigned
-          FROM todos
+          FROM M4_Todos
           WHERE completed = 1
           ORDER BY completed_date DESC, due DESC"; // edit this
 $results = [];

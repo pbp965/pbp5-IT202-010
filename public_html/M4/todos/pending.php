@@ -45,7 +45,7 @@ $query = "SELECT
             due, 
             DATEDIFF(due, CURRENT_DATE) AS days_offset, 
             assigned
-          FROM todos
+          FROM M4_Todos
           WHERE completed = 0
           ORDER BY due ASC"; // edit this
 $results = [];
