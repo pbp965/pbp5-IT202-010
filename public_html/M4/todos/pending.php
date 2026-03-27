@@ -13,8 +13,8 @@ if (isset($_POST["id"])) {
     https://phpdelusions.net/pdo
     */
     $query = "UPDATE M4_Todos 
-              SET completed = 1, completed_date = CURRENT_DATE 
-              WHERE id = :id AND completed = 0"; // edit this
+              SET is_complete = 1, completed = CURRENT_DATE 
+              WHERE id = :id AND is_complete = 0"; // edit this
     $params = [
         "id" => $id
     ];
@@ -46,7 +46,7 @@ $query = "SELECT
             DATEDIFF(due, CURRENT_DATE) AS days_offset, 
             assigned
           FROM M4_Todos
-          WHERE completed = 0
+          WHERE is_complete = 0
           ORDER BY due ASC"; // edit this
 $results = [];
 try {
