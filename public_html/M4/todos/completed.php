@@ -15,12 +15,12 @@ $query = "SELECT
             id, 
             task, 
             due, 
-            DATE(completed_date) AS completed_date, 
-            DATEDIFF(completed_date, due) AS days_offset, 
+            DATE(completed) AS completed, 
+            DATEDIFF(completed, due) AS days_offset, 
             assigned
-          FROM todos
-          WHERE completed = 1
-          ORDER BY completed_date DESC, due DESC"; // edit this
+          FROM M4_Todos
+          WHERE is_complete = 1
+          ORDER BY completed DESC, due DESC"; // edit this
 $results = [];
 try {
     $stmt = $db->prepare($query);

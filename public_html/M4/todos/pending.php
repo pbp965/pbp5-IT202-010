@@ -12,9 +12,9 @@ if (isset($_POST["id"])) {
     Add an extra clause to update only if the complete field of the record is not set.
     https://phpdelusions.net/pdo
     */
-    $query = "UPDATE todos 
-              SET completed = 1, completed_date = CURRENT_DATE 
-              WHERE id = :id AND completed = 0"; // edit this
+    $query = "UPDATE M4_Todos 
+              SET is_complete = 1, completed = CURRENT_DATE 
+              WHERE id = :id AND is_complete = 0"; // edit this
     $params = [
         "id" => $id
     ];
@@ -45,8 +45,8 @@ $query = "SELECT
             due, 
             DATEDIFF(due, CURRENT_DATE) AS days_offset, 
             assigned
-          FROM todos
-          WHERE completed = 0
+          FROM M4_Todos
+          WHERE is_complete = 0
           ORDER BY due ASC"; // edit this
 $results = [];
 try {
