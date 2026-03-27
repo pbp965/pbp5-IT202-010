@@ -19,6 +19,19 @@ if (empty($diff)) {
     // Assigned should check for "self" if a valid format/value isn't provided.
     // Start validations
     // can edit here
+    if (empty($task)) {
+        echo "Task cannot be empty";
+        $is_valid = false;
+    }
+
+    if (empty($due) || !DateTime::createFromFormat('Y-m-d', $due)) {
+        echo "Due date must be in YYYY-MM-DD format";
+        $is_valid = false;
+    }
+
+    if (empty($assigned)) {
+        $assigned = "self"; 
+    }
     // End validations
 
     
@@ -28,8 +41,14 @@ if (empty($diff)) {
         Ensure valid and proper PDO named placeholders are used.
         https://phpdelusions.net/pdo
         */
-        $query = ""; // edit this
-        $params = []; // Apply the proper PDO placeholder to variable mapping here
+        $query = "INSERT INTO todos (task, due, assigned) 
+          VALUES (:task, :due, :assigned)";
+
+        $params = [
+            ":task" => $task,
+            ":due" => $due,
+            ":assigned" => $assigned
+        ];
         try {
             $db = getDB();
             $stmt = $db->prepare($query);
@@ -62,7 +81,21 @@ if (empty($diff)) {
             <!-- design the form with proper labels and input fields with the correct types based on the SQL table.
              Wrap each label/input pair in a div tag.
              For "Assigned" ensure the default value is "self". -->
-          
+            <div>
+                <label for="task">Task:</label>
+                <input type="text" name="task" id="task" required />
+            </div>
+
+            <div>
+                <label for="due">Due Date:</label>
+                <input type="date" name="due" id="due" required />
+            </div>
+
+            <div>
+                <label for="assigned">Assigned:</label>
+                <input type="text" name="assigned" id="assigned" value="self" />
+            </div>
+
             <div>
                 <input type="submit" />
             </div>
