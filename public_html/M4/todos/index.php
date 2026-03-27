@@ -1,74 +1,66 @@
-<?php
-require_once(__DIR__ . "/../../../lib/db.php"); ?>
-
-<?php
-// don't edit - this
-$expected_fields = ["task", "due", "assigned"];
-$diff = array_diff($expected_fields, array_keys($_GET));
-
-if (empty($diff)) {
-
-    // data variables, don't edit
-    $task = $_GET["task"];
-    $due = $_GET["due"]; //hint: must be a valid MySQL date format
-    $assigned = $_GET["assigned"]; // Must be "self" or a valid format (not empty or equivalent)
-
-    $is_valid = true;
-    // TODO Validate the incoming data for correct format based on the SQL table definition.
-    // When not valid, provide a user-friendly message of what specifically was wrong and set $is_valid to false.
-    // Assigned should check for "self" if a valid format/value isn't provided.
-    // Start validations
-    // can edit here
-    // End validations
-
-    
-    if ($is_valid) {
-        /*
-        Design a query to insert the incoming data to the proper columns.
-        Ensure valid and proper PDO named placeholders are used.
-        https://phpdelusions.net/pdo
-        */
-        $query = ""; // edit this
-        $params = []; // Apply the proper PDO placeholder to variable mapping here
-        try {
-            $db = getDB();
-            $stmt = $db->prepare($query);
-            $r = $stmt->execute($params);
-            if ($r) {
-                echo "Inserted new Todo with id " . $db->lastInsertId();
-            } else {
-                echo "Failed to insert";
-            }
-        } catch (PDOException $e) {
-            // extra credit
-            // check if the exception was related to a unique constraint
-            // provide an appropriate user-friendly message for this scenario
-            // Otherwise show the default message below
-            echo "There was an error inserting the record; check the logs (terminal)";
-            error_log("Insert Error: " . var_export($e, true)); // shows in the terminal
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT202 M4 Todos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
         }
-    } else {
-        error_log("Creation input wasn't valid");
-    }
-}
-?>
-<html>
-
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .scenario-list {
+            list-style: none;
+            padding: 0;
+        }
+        .scenario-list li {
+            margin-bottom: 15px;
+        }
+        .scenario-list a {
+            display: block;
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #0066cc;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .scenario-list a:hover {
+            background-color: #0066cc;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .description {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
 <body>
-    <?php require_once(__DIR__ . "/../nav.php"); ?>
-    <section>
-        <h2>Create ToDo </h2>
-        <form>
-            <!-- design the form with proper labels and input fields with the correct types based on the SQL table.
-             Wrap each label/input pair in a div tag.
-             For "Assigned" ensure the default value is "self". -->
-          
-            <div>
-                <input type="submit" />
-            </div>
-        </form>
-    </section>
+    <h1>IT202 Module 4 - Todos</h1>
+    <ul class="scenario-list">
+        <li>
+            <a href="/M4/todos/create.php">Create</a>
+            <div class="description">Add a new todo item</div>
+        </li>
+        <li>
+            <a href="/M4/todos/pending.php">Pending</a>
+            <div class="description">View and manage incomplete todo items</div>
+        </li>
+        <li>
+            <a href="/M4/todos/completed.php">Completed</a>
+            <div class="description">View completed todo items</div>
+        </li>
+    </ul>
 </body>
-</body>
-
 </html>
