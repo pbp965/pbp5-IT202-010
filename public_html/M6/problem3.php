@@ -46,6 +46,12 @@ function joinArrays($users, $activities) {
     printProblemMultiData($users, $activities);
     echo "<br>Joined output:<br>";
     
+    // pbp5, 3/28/2026
+    // Step 1: Iterate through $users
+    // Step 2: Find the activity with the same userID for every user
+    // Step 3: Merge user data and activity into an associative array
+    // Step 4: Add the associative array into $joined
+
     // Note: use the $users and $activities variables to iterate over, don't directly touch $a1-$a4 arrays
     // TODO Objective: Add logic to join both arrays on the userId property into one $joined array
     $joined = []; // result array

@@ -41,7 +41,7 @@ function processCars($cars) {
    $currentYear = date("Y");
 
 foreach ($cars as $car) {
-    $age = $currentYear - $car["year"];
+    $age = $currentYear - $car["year"] - 1;
     $isClassic = $age >= $classic_age;
 
     $processedCars[] = [
