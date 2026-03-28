@@ -24,6 +24,14 @@ function processCars($cars) {
     printProblemData($cars);
     echo "<br>New Properties Output:<br>";
     
+    // pbp5, 3/28/2026
+    // Step 1: Get current year with date() function
+    // Step 2: Iterate through $cars
+    // Step 3: Calculate age for each car (age - current year - car year)
+    // Step 4: Determine if the car is classic
+    // Step 5: Create new array with updated attributes
+    // Step 6: Store attribute arrays into $processedCars
+
     // Note: use the $cars variable to iterate over, don't directly touch $a1-$a4
     // TODO Objective: Add logic to create a new array ($processedCars) with original properties plus age and isClassic. isClassic is a boolean based on today\'s year and the $classic_age variable.
     $currentYear = null; // determine current year

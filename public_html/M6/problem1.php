@@ -25,10 +25,10 @@ function processBirds($birds) {
     echo "<br>Subset output:<br>";
     
     // pbp5, 3/28/2026
-    // Step 1. Iterate through the $birds
-    // Step 2. Extract name, color, and region
-    // Step 3. Create a asscociative array for each attribute
-    // Step 4. Add each attribbute array into $subset
+    // Step 1: Iterate through $birds
+    // Step 2: Extract name, color, and region
+    // Step 3: Create a asscociative array for each attribute
+    // Step 4: Add each attribbute array into $subset
 
     // Note: use the $birds variable to iterate over, don't directly touch $a1-$a4
     // TODO Objective: Extract the name, color, region into a separate multi-dimension array called $subset
