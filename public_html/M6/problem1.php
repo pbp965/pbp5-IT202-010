@@ -34,7 +34,13 @@ function processBirds($birds) {
     // TODO Objective: Extract the name, color, region into a separate multi-dimension array called $subset
     $subset = []; // result array
     // Start edits
-    
+    foreach ($birds as $bird) {
+    $subset[] = [
+        "name" => $bird["name"],
+        "color" => $bird["color"],
+        "region" => $bird["region"]
+    ];
+}
     // End edits
     echo "<pre>" . var_export($subset, true) . "</pre>";
    
