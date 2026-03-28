@@ -60,7 +60,7 @@ function joinArrays($users, $activities) {
     foreach ($activities as $act) {
         if ($user["userId"] === $act["userId"]) {
             $joined[] = array_merge($user, $act);
-            break; // stop inner loop once match found
+            break;
         }
     }
     }
