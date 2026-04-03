@@ -19,9 +19,9 @@ if ($domain != "localhost") {
 session_start();
 require(__DIR__."/../lib/functions.php");
 ?>
-<nav>
+<nav> 
     <ul>
-        <!-- new content below -->
+                <!-- new content below -->
         <?php if (is_logged_in()) : ?> 
             <li><a href="landing.php">Home</a></li>
         <?php endif; ?> 
