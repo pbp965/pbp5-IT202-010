@@ -41,6 +41,12 @@ if (isset($_POST["email"], $_POST["password"], $_POST["confirm"])) {
         echo "Email must not be empty<br>";
         $hasError = true;
     }
+    // Sanitize and validate email
+    $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "Invalid email address<br>";
+        $hasError = true;
+    }
 
     if (empty($password)) {
         echo "Password must not be empty<br>";
@@ -62,8 +68,22 @@ if (isset($_POST["email"], $_POST["password"], $_POST["confirm"])) {
         $hasError = true;
     }
 
-    if (!$hasError) {
-        echo "Success<br>";
+    if (!$hasError){
+        // comment out or delete the "success" echo
+        // echo "Success<br>";
+        // TODO 4: Hash password before storing
+        $hashed_password = password_hash($password, PASSWORD_BCRYPT);   
+        $db = getDB(); // available due to the `require()` of `functions.php` 
+        // Code for inserting user data into the database
+        $stmt = $db->prepare("INSERT INTO Users (email, password) VALUES (:email, :password)"); 
+        try{
+            $stmt->execute([':email' => $email, ':password' => $hashed_password]); 
+            echo "Successfully registered!";
+        }
+        catch(Exception $e){
+            echo "There was an error registering<br>"; // user-friendly message
+            error_log("Registration Error: " . var_export($e, true)); // log the technical error for debugging
+        }
     }
 }
 ?>
