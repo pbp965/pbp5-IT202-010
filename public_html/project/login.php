@@ -54,29 +54,34 @@ if (isset($_POST["email"], $_POST["password"])) {
     }
 
     if (!$hasError) {
-    //TODO 4: Check password and fetch user
-    $db = getDB(); 
-    $stmt = $db->prepare("SELECT id, email, password from Users where email = :email"); 
-    try {
-        $r = $stmt->execute([":email" => $email]); 
-        if ($r) {
-            $user = $stmt->fetch(PDO::FETCH_ASSOC); 
-            if ($user) {
-                $hash = $user["password"];
-                unset($user["password"]); 
-                if (password_verify($password, $hash)) { 
-                    echo "Welcome, $email!<br>";
+        //TODO 4: Check password and fetch user
+        $db = getDB(); 
+        $stmt = $db->prepare("SELECT id, email, password from Users where email = :email"); 
+        try {
+            $r = $stmt->execute([":email" => $email]); 
+            if ($r) {
+                $user = $stmt->fetch(PDO::FETCH_ASSOC); 
+                if ($user) {
+                    $hash = $user["password"];
+                    unset($user["password"]); 
+                    if (password_verify($password, $hash)) { 
+                        echo "Welcome, $email!<br>";
+                        $_SESSION["user"] = $user; // add the data to the active session
+                        header("Location: landing.php");
+                        die(); // stop script execution after header
+                        // or as a single line
+                        die(header("Location: landing.php"));
+                    } else {
+                        echo "Invalid password<br>";
+                    }
                 } else {
-                    echo "Invalid password<br>";
+                    echo "Email not found<br>"; 
                 }
-            } else {
-                echo "Email not found<br>"; 
             }
+        } catch (Exception $e) {
+            echo "There was an error logging in<br>"; // user-friendly message
+            error_log("Login Error: " . var_export($e, true)); // log the technical error for debugging
         }
-    } catch (Exception $e) {
-        echo "There was an error logging in<br>"; // user-friendly message
-        error_log("Login Error: " . var_export($e, true)); // log the technical error for debugging
     }
-}
 }
 ?>
