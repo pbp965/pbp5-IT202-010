@@ -60,7 +60,7 @@ if (isset($_POST["email"], $_POST["password"])) {
         if (!$hasError) {
             //TODO 4: Check password and fetch user
             $db = getDB();
-            $stmt = $db->prepare("SELECT id, email, password from Users where email = :email");
+            $stmt = $db->prepare("SELECT id, email, username, password from Users where email = :email");
             try {
                 $r = $stmt->execute([":email" => $email]);
                 if ($r) {
@@ -81,7 +81,7 @@ if (isset($_POST["email"], $_POST["password"])) {
                         //echo "Email not found<br>";
                         $ambigify = true; // ambiguous login attempt
                     }
-                    if($ambigify) {
+                    if ($ambigify) {
                         flash("Invalid login attempt. Please check your email and password.", "danger");
                     }
                 }
@@ -96,5 +96,5 @@ if (isset($_POST["email"], $_POST["password"])) {
 ?>
 
 <?php
-require(__DIR__."/../../partials/flash.php");
+require(__DIR__ . "/../../partials/flash.php");
 ?>
