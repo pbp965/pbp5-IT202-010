@@ -17,3 +17,13 @@ function flash(message = "", color = "info") {
 function isValidPassword(pass) {
     return pass?.length >= 8; 
 }
+function isValidEmail(email) {
+    if (!email) return false;
+    let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+function isValidUsername(username) {
+    if (!username) return false;
+    let re = /^[a-z0-9_-]+$/;
+    return re.test(username);
+}

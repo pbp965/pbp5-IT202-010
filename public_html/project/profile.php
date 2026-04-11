@@ -180,17 +180,30 @@ if (isset($_POST["currentPassword"], $_POST["newPassword"], $_POST["confirmPassw
         let con = form.confirmPassword.value;
         let isValid = true;
         //TODO add other client side validation....
-        if(isValidPassword(pw)) {
-            flash("Password must be atleast 8 characters", "warning");
+        if(!isValidPassword(pw)) {
+            flash("Password must be at least 8 characters", "warning");
             isValid = false;
         }
-
 
         //example of using flash via javascript
         //find the flash container, create a new element, appendChild
         // NOTE: we'll extract the flash code to a function later
         if (pw !== con) { // first JS validation example
-            flash("Password and confirm password must match", "danger");
+            //find the container
+            let flash = document.getElementById("flash");
+            //create a div (or whatever wrapper we want)
+            let outerDiv = document.createElement("div");
+            outerDiv.className = "row justify-content-center";
+            let innerDiv = document.createElement("div");
+
+            //apply the CSS (these are bootstrap classes which we'll learn later)
+            innerDiv.className = "alert alert-warning";
+            //set the content
+            innerDiv.innerText = "Password and Confirm password must match";
+
+            outerDiv.appendChild(innerDiv);
+            //add the element to the DOM (if we don't it merely exists in memory)
+            flash.appendChild(outerDiv);
             isValid = false;
         }
         // returning false will prevent the form from submitting
