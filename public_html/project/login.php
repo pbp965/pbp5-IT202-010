@@ -18,6 +18,8 @@ require(__DIR__ . "/../../partials/nav.php");
     function validate(form) {
         //TODO 1: implement JavaScript validation (you'll do this on your own towards the end of Milestone1)
         //ensure it returns false for an error and true for success
+        // UCID: pbp5
+        // Date: 4/12/26
         let isValid = true;
         const email = form.email.value.trim();
         const pw = form.password.value;

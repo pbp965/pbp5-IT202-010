@@ -181,6 +181,8 @@ if (isset($_POST["currentPassword"], $_POST["newPassword"], $_POST["confirmPassw
         let con = form.confirmPassword.value;
         let isValid = true;
         //TODO add other client side validation....
+        // UCID: pbp5
+        // Date: 4/12/26
         const email = form.email.value.trim();
         const username = form.username.value.trim();
         const curPw = form.currentPassword.value;
