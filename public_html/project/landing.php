@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require(__DIR__ . "/../../partials/nav.php");
 error_log("Session: " . var_export($_SESSION, true));
 ?>

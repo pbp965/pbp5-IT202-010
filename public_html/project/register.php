@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require(__DIR__ . "/../../partials/nav.php");
 ?>
 <h3>Register</h3>
