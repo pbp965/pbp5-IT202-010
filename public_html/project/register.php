@@ -9,7 +9,7 @@ require(__DIR__ . "/../../partials/nav.php");
     </div>
     <div>
         <label for="username">Username</label>
-        <input type="text" name="username" required maxlength="30" />
+        <input type="text" name="username" required maxlength="30" pattern="[a-z0-9_\-]+" title="Lowercase letters, numbers, _ or - only"/>
     </div>
     <div>
         <label for="pw">Password</label>
@@ -26,10 +26,37 @@ require(__DIR__ . "/../../partials/nav.php");
         //TODO 1: implement JavaScript validation (you'll do this on your own towards the end of Milestone1)
         //ensure it returns false for an error and true for success
         let isValid = true;
-        if(!isValidPassword(pw)) {
-            flash("Password must be at least 8 characters", "warning");
+        const email = form.email.value.trim();
+        const username = form.username.value.trim();
+        const pw = form.password.value;
+        const confirm = form.confirm.value;
+
+        if (!email) {
+            flash("Email must not be empty.", "danger");
+            isValid = false;
+        } else if (!isValidEmail(email)) {
+            flash("Please enter a valid email address.", "danger");
             isValid = false;
         }
+
+        if (!username) {
+            flash("Username must not be empty.", "danger");
+            isValid = false;
+        } else if (!isValidUsername(username)) {
+            flash("Username must be lowercase, alphanumerical, and can only contain _ or -", "warning");
+            isValid = false;
+        }
+
+        if (!isValidPassword(pw)) {
+            flash("Password must be at least 8 characters.", "warning");
+            isValid = false;
+        }
+
+        if (!isValidConfirm(pw, confirm)) {
+            flash("Passwords must match.", "warning");
+            isValid = false;
+        }
+
         return isValid;
     }
 </script>
@@ -86,13 +113,12 @@ if (isset($_POST["email"], $_POST["password"], $_POST["confirm"], $_POST["userna
         $stmt = $db->prepare("INSERT INTO Users (email, password, username) VALUES (:email, :password, :username)");
         try {
             $stmt->execute([':email' => $email, ':password' => $hashed_password, ':username' => $username]);
-   
+
             flash("Successfully registered! You can now log in.", "success");
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             // Handle duplicate email/username
             users_check_duplicate($e);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             flash("There was an error registering. Please try again.", "danger");
             error_log("Registration Error: " . var_export($e, true)); // log the technical error for debugging
         }

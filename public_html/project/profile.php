@@ -94,7 +94,7 @@ if (isset($_POST["currentPassword"], $_POST["newPassword"], $_POST["confirmPassw
     $can_update = !empty($current_password) && !empty($new_password) && !empty($confirm_password);
     if ($can_update) {
         // check that new matches confirm (i.e., no typos)
-        if (!is_valid_confirm($new_password,$confirm_password)) {
+        if (!is_valid_confirm($new_password, $confirm_password)) {
             flash("New passwords don't match", "warning");
         } else {
             //validate current password against password rules
@@ -155,7 +155,8 @@ if (isset($_POST["currentPassword"], $_POST["newPassword"], $_POST["confirmPassw
     </div>
     <div class="mb-3">
         <label for="username">Username</label>
-        <input type="text" name="username" id="username" value="<?php se($username); ?>" />
+        <input type="text" name="username" id="username" value="<?php se($username); ?>"
+            required pattern="[a-z0-9_\-]+" title="Lowercase letters, numbers, _ or - only" maxlength="30" />
     </div>
     <!-- DO NOT PRELOAD PASSWORD -->
     <div>Password Reset</div>
@@ -180,11 +181,43 @@ if (isset($_POST["currentPassword"], $_POST["newPassword"], $_POST["confirmPassw
         let con = form.confirmPassword.value;
         let isValid = true;
         //TODO add other client side validation....
-        if(!isValidPassword(pw)) {
-            flash("Password must be at least 8 characters", "warning");
+        const email = form.email.value.trim();
+        const username = form.username.value.trim();
+        const curPw = form.currentPassword.value;
+        const newPw = form.newPassword.value;
+        const conPw = form.confirmPassword.value;
+
+        if (!email) {
+            flash("Email must not be empty.", "danger");
+            isValid = false;
+        } else if (!isValidEmail(email)) {
+            flash("Please enter a valid email address.", "danger");
             isValid = false;
         }
 
+        if (!username) {
+            flash("Username must not be empty.", "danger");
+            isValid = false;
+        } else if (!isValidUsername(username)) {
+            flash("Username must be lowercase, alphanumerical, and can only contain _ or -", "warning");
+            isValid = false;
+        }
+
+        const attemptingPasswordChange = curPw || newPw || conPw;
+        if (attemptingPasswordChange) {
+            if (!curPw) {
+                flash("Current password is required to change your password.", "warning");
+                isValid = false;
+            }
+            if (!isValidPassword(newPw)) {
+                flash("New password must be at least 8 characters.", "warning");
+                isValid = false;
+            }
+            if (!isValidConfirm(newPw, conPw)) {
+                flash("New password and confirm password must match.", "warning");
+                isValid = false;
+            }
+        }
         //example of using flash via javascript
         //find the flash container, create a new element, appendChild
         // NOTE: we'll extract the flash code to a function later

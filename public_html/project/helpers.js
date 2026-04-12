@@ -18,12 +18,15 @@ function isValidPassword(pass) {
     return pass?.length >= 8; 
 }
 function isValidEmail(email) {
-    if (!email) return false;
-    let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email?.trim());
 }
+
+// Returns true if value is a valid username: lowercase, alphanumeric, _ or -
 function isValidUsername(username) {
-    if (!username) return false;
-    let re = /^[a-z0-9_-]+$/;
-    return re.test(username);
+    return /^[a-z0-9_-]+$/.test(username?.trim());
+}
+
+// Returns true if both values are non-empty and match
+function isValidConfirm(value, confirm) {
+    return !!value && value === confirm;
 }

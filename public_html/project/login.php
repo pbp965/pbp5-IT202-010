@@ -1,5 +1,5 @@
 <?php
-ob_start();// Temp fix to resolve output buffer issues that send the header() early that cause issues with the header("Location:...") below
+ob_start(); // Temp fix to resolve output buffer issues that send the header() early that cause issues with the header("Location:...") below
 require(__DIR__ . "/../../partials/nav.php");
 ?>
 <h3>Login</h3>
@@ -19,11 +19,27 @@ require(__DIR__ . "/../../partials/nav.php");
         //TODO 1: implement JavaScript validation (you'll do this on your own towards the end of Milestone1)
         //ensure it returns false for an error and true for success
         let isValid = true;
-        if(!isValidPassword(pw)) {
-            flash("Password must be at least 8 characters", "warning");
+        const email = form.email.value.trim();
+        const pw = form.password.value;
+
+        if (!email) {
+            flash("Email or username must not be empty.", "danger");
+            isValid = false;
+        } else if (email.includes("@") && !isValidEmail(email)) {
+            flash("Please enter a valid email address.", "danger");
+            isValid = false;
+        } else if (!email.includes("@") && !isValidUsername(email)) {
+            flash("Username must be lowercase, alphanumerical, and can only contain _ or -", "warning");
             isValid = false;
         }
+
+        if (!isValidPassword(pw)) {
+            flash("Password must be at least 8 characters.", "warning");
+            isValid = false;
+        }
+
         return isValid;
+
     }
 </script>
 <?php

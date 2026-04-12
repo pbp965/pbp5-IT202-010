@@ -54,15 +54,15 @@
 /* Update the below for Milestone 1 requirements */
 nav li {
     display: inline;
-    background-color: rebeccapurple;
+    background-color: rgba(255, 255, 255, 0.647);
 }
 
 nav li a {
-    color: rgb(4, 179, 120);
+    color: rgb(0, 0, 0);
     padding: .25rem;
 }
 nav li a:hover {
-    color: pink;
+    color: rgb(0, 0, 0);
 }
 
 nav::after {
@@ -72,15 +72,15 @@ nav::after {
 
 }
 label{
-    border:#212529 dashed 2px;
-    background-color: bisque;
+    border:#ffe69c dashed 2px;
+    background-color: #ffe69c;
 }
 input {
     border-radius: 25%;
     padding: .25rem;
 }
 input:hover{
-    transform: rotateZ(10deg);
+    transform: rotateZ(0deg);
 }
 form,h3 {
     display: flex;
@@ -91,8 +91,8 @@ form,h3 {
 }
 
 body {
-    background-color: rgb(0, 68, 48);
-    color: rgb(255, 19, 235);
+    background-color: #ffe69c;
+    color: rgb(0, 0, 0);
 }
 input[type="submit"]:hover {
     transform: scale(1.15)
