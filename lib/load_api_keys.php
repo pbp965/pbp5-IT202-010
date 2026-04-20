@@ -1,9 +1,9 @@
 <?php
 // string array containing env keys to lookup (this allows usage of multiple APIs)
-$env_keys = ["STOCK_API_KEY"];
+$env_keys = ["STOCK_API_KEY", "CITIES_API_KEY"];
 $ini = @parse_ini_file(".env");
 
-$API_KEYS = [];
+$API_KEYS = ["CITIES_API_KEY"];
 foreach ($env_keys as $key) {
     if ($ini && isset($ini[$key])) {
         //load local .env file
