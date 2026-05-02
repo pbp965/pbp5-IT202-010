@@ -13,13 +13,13 @@
  */
 function fetch_city($namePrefix)
 {
-    $data = ["namePrefix" => $_GET["namePrefix"]];
-    $endpoint = "https://wft-geo-db.p.rapidapi.com/v1/geo/cities";
-    $isRapidAPI = true;
-    $rapidAPIHost = "wft-geo-db.p.rapidapi.com";
-    $result = get($endpoint, "CITIES_API_KEY", $data, $isRapidAPI, $rapidAPIHost);
-    //example of cached data to save the quotas, don't forget to comment out the get() if using the cached data for testing
-    /* $result = ["status" => 200, "response" => '                    array (
+  $data = ["namePrefix" => $_GET["namePrefix"]];
+  $endpoint = "https://wft-geo-db.p.rapidapi.com/v1/geo/cities";
+  $isRapidAPI = true;
+  $rapidAPIHost = "wft-geo-db.p.rapidapi.com";
+  $result = get($endpoint, "CITIES_API_KEY", $data, $isRapidAPI, $rapidAPIHost);
+  //example of cached data to save the quotas, don't forget to comment out the get() if using the cached data for testing
+  /* $result = ["status" => 200, "response" => '                    array (
   0 => 
   array (
     'id' => 123214,
@@ -42,42 +42,41 @@ function fetch_city($namePrefix)
   'totalCount' => 1,
 )   
 }'];*/
-    error_log("API Response: " . var_export($result, true));
-    if (se($result, "status", 400, false) == 200 && isset($result["response"])) {
-        $result = json_decode($result["response"], true);
-    } else {
-        $result = [];
+  error_log("API Response: " . var_export($result, true));
+  if (se($result, "status", 400, false) == 200 && isset($result["response"])) {
+    $result = json_decode($result["response"], true);
+  } else {
+    $result = [];
+  }
+
+  $transformedResult = [];
+  // transform data to match our DB structure
+  if (isset($result["data"])) {
+    foreach ($result["data"] as $city) {
+
+      $transformed[] = [
+        "api_id" => $city["id"] ?? null,
+        "name" => $city["name"] ?? "",
+        "latitude" => isset($city["latitude"]) ? floatval($city["latitude"]) : null,
+        "longitude" => isset($city["longitude"]) ? floatval($city["longitude"]) : null,
+        "population" => isset($city["population"]) ? intval($city["population"]) : 0,
+        "country_code" => $city["countryCode"] ?? null,
+        "is_api" => 1
+      ];
     }
-
-    $transformedResult = [];
-    // transform data to match our DB structure
-    if (isset($result["data"])) {
-        foreach ($result["data"] as $city) {
-
-            $transformed[] = [
-                "api_id" => $city["id"] ?? null,
-                "name" => $city["name"] ?? "",
-                "latitude" => isset($city["latitude"]) ? floatval($city["latitude"]) : null,
-                "longitude" => isset($city["longitude"]) ? floatval($city["longitude"]) : null,
-                "population" => isset($city["population"]) ? intval($city["population"]) : 0,
-                "country_code" => $city["countryCode"] ?? null,
-                "is_api" => 1
-            ];
-        }
-    }
-    return $transformedResult;
-
+  }
+  return $transformedResult;
 }
 
 function search_countries($namePrefix)
 {
-    $data = ["namePrefix" => $_GET["namePrefix"]];
-    $endpoint = "https://wft-geo-db.p.rapidapi.com/v1/geo/countries";
-    $isRapidAPI = true;
-    $rapidAPIHost = "wft-geo-db.p.rapidapi.com";
-    $result = get($endpoint, "CITIES_API_KEY", $data, $isRapidAPI, $rapidAPIHost);
-    //example of cached data to save the quotas, don't forget to comment out the get() if using the cached data for testing
-    /* $result = ["status" => 200, "response" => '                    array (
+  $data = ["namePrefix" => $_GET["namePrefix"]];
+  $endpoint = "https://wft-geo-db.p.rapidapi.com/v1/geo/countries";
+  $isRapidAPI = true;
+  $rapidAPIHost = "wft-geo-db.p.rapidapi.com";
+  $result = get($endpoint, "CITIES_API_KEY", $data, $isRapidAPI, $rapidAPIHost);
+  //example of cached data to save the quotas, don't forget to comment out the get() if using the cached data for testing
+  /* $result = ["status" => 200, "response" => '                    array (
   0 => 
   array (
     'code' => 'AE',
@@ -113,27 +112,26 @@ function search_countries($namePrefix)
   'currentOffset' => 0,
   'totalCount' => 3,
 ) ];*/
-    error_log("API Response: " . var_export($result, true));
-    if (se($result, "status", 400, false) == 200 && isset($result["response"])) {
-        $result = json_decode($result["response"], true);
-    } else {
-        $result = [];
-    }
-    
-    // transform data
-    $transformed = [];
-    if (isset($result["data"])) {
-        foreach ($result["data"] as $city) {
+  error_log("API Response: " . var_export($result, true));
+  if (se($result, "status", 400, false) == 200 && isset($result["response"])) {
+    $result = json_decode($result["response"], true);
+  } else {
+    $result = [];
+  }
 
-            $transformed[] = [
-                "api_id" => $country["code"] ?? null,
-                "name" => $country["name"] ?? "",
-                "currency" => $country["currencyCodes"][0] ?? null,
-                "wiki_id" => $country["wikiDataId"] ?? null,
-                "is_api" => 1
-            ];
-        }
+  // transform data
+  $transformed = [];
+  if (isset($result["data"])) {
+    foreach ($result["data"] as $city) {
+
+      $transformed[] = [
+        "api_id" => $country["code"] ?? null,
+        "name" => $country["name"] ?? "",
+        "code" => $country["code"] ?? "",
+        "currency" => $country["currencyCodes"][0] ?? null,
+        "is_api" => 1
+      ];
     }
-    return $transformed;
-    
+  }
+  return $transformed;
 }

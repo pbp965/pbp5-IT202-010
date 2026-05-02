@@ -10,7 +10,6 @@ require_once(__DIR__ . "/../../../lib/cities_api.php");
 
 $city = [];
 
-// Handle form submission
 if (isset($_POST["action"])) {
     $action = $_POST["action"];
     $namePrefix = trim(se($_POST, "namePrefix", "", false));
@@ -20,7 +19,6 @@ if (isset($_POST["action"])) {
             $results = fetch_city($namePrefix);
 
             if (!empty($results)) {
-                // take first result (you can expand later if needed)
                 $city = $results[0];
                 $city["is_api"] = 1;
             } else {
@@ -29,11 +27,8 @@ if (isset($_POST["action"])) {
         } else {
             flash("City name is required", "warning");
         }
-    }
+    } else if ($action === "create") {
 
-    else if ($action === "create") {
-
-        // whitelist allowed columns (IMPORTANT for grading/security)
         $allowed = ["name", "latitude", "longitude", "population", "country_code"];
 
         foreach ($_POST as $k => $v) {
@@ -45,7 +40,6 @@ if (isset($_POST["action"])) {
         $city = $_POST;
         $city["is_api"] = 0;
 
-        // basic server-side validation
         if (empty($city["name"])) {
             flash("City name is required", "danger");
             return;
@@ -53,7 +47,6 @@ if (isset($_POST["action"])) {
 
         $db = getDB();
 
-        // build dynamic insert query
         $columns = [];
         $params = [];
 
@@ -69,7 +62,6 @@ if (isset($_POST["action"])) {
             $stmt->execute($params);
             flash("City created successfully (ID: " . $db->lastInsertId() . ")", "success");
         } catch (PDOException $e) {
-            // duplicate API protection
             if (str_contains($e->getMessage(), "Duplicate")) {
                 flash("This city already exists in the database", "warning");
             } else {
@@ -93,7 +85,7 @@ if (isset($_POST["action"])) {
         </li>
     </ul>
 
-    <!-- FETCH FROM API -->
+
     <div id="fetch" class="tab-target">
         <form method="POST" onsubmit="return validateFetch()">
             <div class="mb-3">
@@ -105,7 +97,7 @@ if (isset($_POST["action"])) {
         </form>
     </div>
 
-    <!-- CREATE MANUALLY -->
+
     <div id="create" style="display:none;" class="tab-target">
         <form method="POST" onsubmit="return validateCreate()">
             <div class="mb-3">
@@ -138,7 +130,7 @@ if (isset($_POST["action"])) {
         </form>
     </div>
 
-    <!-- Preview fetched result -->
+
     <?php if (!empty($city)): ?>
         <hr>
         <h4>Preview</h4>
@@ -147,31 +139,30 @@ if (isset($_POST["action"])) {
 </div>
 
 <script>
-function switchTab(tab) {
-    let sections = document.getElementsByClassName("tab-target");
-    for (let s of sections) {
-        s.style.display = (s.id === tab) ? "block" : "none";
+    function switchTab(tab) {
+        let sections = document.getElementsByClassName("tab-target");
+        for (let s of sections) {
+            s.style.display = (s.id === tab) ? "block" : "none";
+        }
     }
-}
 
-// JS validation (required by milestone)
-function validateFetch() {
-    let name = document.getElementById("namePrefix").value.trim();
-    if (!name) {
-        alert("City name is required");
-        return false;
+    function validateFetch() {
+        let name = document.getElementById("namePrefix").value.trim();
+        if (!name) {
+            alert("City name is required");
+            return false;
+        }
+        return true;
     }
-    return true;
-}
 
-function validateCreate() {
-    let name = document.querySelector("[name='name']").value.trim();
-    if (!name) {
-        alert("City name is required");
-        return false;
+    function validateCreate() {
+        let name = document.querySelector("[name='name']").value.trim();
+        if (!name) {
+            alert("City name is required");
+            return false;
+        }
+        return true;
     }
-    return true;
-}
 </script>
 
 <?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>
