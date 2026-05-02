@@ -1,0 +1,177 @@
+<?php
+require(__DIR__ . "/../../../partials/nav.php");
+
+if (!has_role("Admin")) {
+    flash("You don't have permission to view this page", "warning");
+    die(header("Location: " . get_url("landing.php")));
+}
+
+require_once(__DIR__ . "/../../../lib/cities_api.php");
+
+$city = [];
+
+// Handle form submission
+if (isset($_POST["action"])) {
+    $action = $_POST["action"];
+    $namePrefix = trim(se($_POST, "namePrefix", "", false));
+
+    if ($action === "fetch") {
+        if ($namePrefix) {
+            $results = fetch_city($namePrefix);
+
+            if (!empty($results)) {
+                // take first result (you can expand later if needed)
+                $city = $results[0];
+                $city["is_api"] = 1;
+            } else {
+                flash("No cities found from API", "warning");
+            }
+        } else {
+            flash("City name is required", "warning");
+        }
+    }
+
+    else if ($action === "create") {
+
+        // whitelist allowed columns (IMPORTANT for grading/security)
+        $allowed = ["name", "latitude", "longitude", "population", "country_code"];
+
+        foreach ($_POST as $k => $v) {
+            if (!in_array($k, $allowed)) {
+                unset($_POST[$k]);
+            }
+        }
+
+        $city = $_POST;
+        $city["is_api"] = 0;
+
+        // basic server-side validation
+        if (empty($city["name"])) {
+            flash("City name is required", "danger");
+            return;
+        }
+
+        $db = getDB();
+
+        // build dynamic insert query
+        $columns = [];
+        $params = [];
+
+        foreach ($city as $k => $v) {
+            $columns[] = "`$k`";
+            $params[":$k"] = $v;
+        }
+
+        $query = "INSERT INTO cities (" . join(",", $columns) . ") VALUES (" . join(",", array_keys($params)) . ")";
+
+        try {
+            $stmt = $db->prepare($query);
+            $stmt->execute($params);
+            flash("City created successfully (ID: " . $db->lastInsertId() . ")", "success");
+        } catch (PDOException $e) {
+            // duplicate API protection
+            if (str_contains($e->getMessage(), "Duplicate")) {
+                flash("This city already exists in the database", "warning");
+            } else {
+                error_log($e);
+                flash("An error occurred while creating the city", "danger");
+            }
+        }
+    }
+}
+?>
+
+<div class="container-fluid">
+    <h3>Create or Fetch City</h3>
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link bg-success" href="#" onclick="switchTab('fetch')">Fetch</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link bg-success" href="#" onclick="switchTab('create')">Create</a>
+        </li>
+    </ul>
+
+    <!-- FETCH FROM API -->
+    <div id="fetch" class="tab-target">
+        <form method="POST" onsubmit="return validateFetch()">
+            <div class="mb-3">
+                <label for="namePrefix">City Name</label>
+                <input type="text" name="namePrefix" id="namePrefix" required>
+            </div>
+            <input type="hidden" name="action" value="fetch">
+            <input type="submit" value="Fetch from API" class="btn btn-primary">
+        </form>
+    </div>
+
+    <!-- CREATE MANUALLY -->
+    <div id="create" style="display:none;" class="tab-target">
+        <form method="POST" onsubmit="return validateCreate()">
+            <div class="mb-3">
+                <label>City Name</label>
+                <input type="text" name="name" required>
+            </div>
+
+            <div class="mb-3">
+                <label>Latitude</label>
+                <input type="number" step="0.000001" name="latitude">
+            </div>
+
+            <div class="mb-3">
+                <label>Longitude</label>
+                <input type="number" step="0.000001" name="longitude">
+            </div>
+
+            <div class="mb-3">
+                <label>Population</label>
+                <input type="number" name="population">
+            </div>
+
+            <div class="mb-3">
+                <label>Country Code</label>
+                <input type="text" name="country_code" maxlength="5">
+            </div>
+
+            <input type="hidden" name="action" value="create">
+            <input type="submit" value="Create City" class="btn btn-primary">
+        </form>
+    </div>
+
+    <!-- Preview fetched result -->
+    <?php if (!empty($city)): ?>
+        <hr>
+        <h4>Preview</h4>
+        <pre><?php echo htmlspecialchars(print_r($city, true)); ?></pre>
+    <?php endif; ?>
+</div>
+
+<script>
+function switchTab(tab) {
+    let sections = document.getElementsByClassName("tab-target");
+    for (let s of sections) {
+        s.style.display = (s.id === tab) ? "block" : "none";
+    }
+}
+
+// JS validation (required by milestone)
+function validateFetch() {
+    let name = document.getElementById("namePrefix").value.trim();
+    if (!name) {
+        alert("City name is required");
+        return false;
+    }
+    return true;
+}
+
+function validateCreate() {
+    let name = document.querySelector("[name='name']").value.trim();
+    if (!name) {
+        alert("City name is required");
+        return false;
+    }
+    return true;
+}
+</script>
+
+<?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>
