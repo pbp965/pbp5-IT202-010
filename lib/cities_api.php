@@ -126,12 +126,10 @@ function search_countries($namePrefix)
         foreach ($result["data"] as $city) {
 
             $transformed[] = [
-                "api_id" => $city["id"] ?? null,
-                "name" => $city["name"] ?? "",
-                "latitude" => isset($city["latitude"]) ? floatval($city["latitude"]) : null,
-                "longitude" => isset($city["longitude"]) ? floatval($city["longitude"]) : null,
-                "population" => isset($city["population"]) ? intval($city["population"]) : 0,
-                "country_code" => $city["countryCode"] ?? null,
+                "api_id" => $country["code"] ?? null,
+                "name" => $country["name"] ?? "",
+                "currency" => $country["currencyCodes"][0] ?? null,
+                "wiki_id" => $country["wikiDataId"] ?? null,
                 "is_api" => 1
             ];
         }
