@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS `countries` (
-  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `code` varchar(10) NOT NULL UNIQUE,
   `currency` varchar(10),
@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `countries` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-  `is_api` tinyint(1) DEFAULT '1'
+  `is_api` tinyint(1) DEFAULT '0',
 
   PRIMARY KEY (`id`)
 );
