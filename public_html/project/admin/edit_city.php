@@ -1,5 +1,6 @@
 <?php
 require(__DIR__ . "/../../../partials/nav.php");
+require_once(__DIR__ . "/../../../lib/db_helpers.php");
 
 if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
@@ -30,30 +31,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (empty($city["name"])) {
         flash("City name is required", "danger");
     } else {
+    $city["id"] = $id;
 
-        $query = "UPDATE cities SET ";
-        $params = [];
-
-        foreach ($city as $k => $v) {
-            if (!empty($params)) {
-                $query .= ", ";
-            }
-            $query .= "`$k` = :$k";
-            $params[":$k"] = $v;
-        }
-
-        $query .= " WHERE id = :id";
-        $params[":id"] = $id;
-
-        try {
-            $stmt = $db->prepare($query);
-            $stmt->execute($params);
-            flash("City updated successfully", "success");
-        } catch (PDOException $e) {
-            error_log("Update error: " . var_export($e, true));
-            flash("Error updating city", "danger");
-        }
+    try {
+        update("cities", $city, ["id"]);
+        flash("City updated successfully", "success");
+    } catch (PDOException $e) {
+        error_log("Update error: " . var_export($e, true));
+        flash("Error updating city", "danger");
     }
+}
 }
 
 $city = [];

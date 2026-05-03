@@ -1,5 +1,6 @@
 <?php
 require(__DIR__ . "/../../../partials/nav.php");
+require_once(__DIR__ . "/../../../lib/db_helpers.php");
 
 if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
@@ -30,30 +31,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (empty($country["name"]) || empty($country["code"])) {
         flash("Name and code are required", "danger");
     } else {
+        // normalize before passing to update()
+        if (isset($country["code"]))     $country["code"]     = strtoupper($country["code"]);
+        if (isset($country["currency"])) $country["currency"] = strtoupper($country["currency"]);
 
-        $query = "UPDATE countries SET ";
-        $params = [];
-
-        foreach ($country as $k => $v) {
-            if (!empty($params)) {
-                $query .= ", ";
-            }
-
-            $query .= "`$k` = :$k";
-            $params[":$k"] = $v;
-
-            // normalize
-            if ($k === "code" || $k === "currency") {
-                $params[":$k"] = strtoupper($v);
-            }
-        }
-
-        $query .= " WHERE id = :id";
-        $params[":id"] = $id;
+        $country["id"] = $id;
 
         try {
-            $stmt = $db->prepare($query);
-            $stmt->execute($params);
+            update("countries", $country, ["id"]);
             flash("Country updated successfully", "success");
         } catch (PDOException $e) {
             error_log("Update error: " . var_export($e, true));
@@ -113,16 +98,16 @@ try {
 </div>
 
 <script>
-function validateForm() {
-    let name = document.querySelector("[name='name']").value.trim();
-    let code = document.querySelector("[name='code']").value.trim();
+    function validateForm() {
+        let name = document.querySelector("[name='name']").value.trim();
+        let code = document.querySelector("[name='code']").value.trim();
 
-    if (!name || !code) {
-        alert("Name and code are required");
-        return false;
+        if (!name || !code) {
+            alert("Name and code are required");
+            return false;
+        }
+        return true;
     }
-    return true;
-}
 </script>
 
 <?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>

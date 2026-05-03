@@ -52,9 +52,8 @@ if (isset($_POST["action"])) {
                               VALUES (" . join(",", array_keys($params)) . ")";
 
                         try {
-                            $stmt = $db->prepare($query);
-                            $stmt->execute($params);
-
+                            require_once(__DIR__ . "/../../../lib/db_helpers.php");
+                            insert("cities", $insertCity);
                             flash("Inserted Record", "success");
                         } catch (PDOException $e) {
                             error_log($e);
@@ -86,22 +85,10 @@ if (isset($_POST["action"])) {
             return;
         }
 
-        $db = getDB();
-
-        $columns = [];
-        $params = [];
-
-        foreach ($city as $k => $v) {
-            $columns[] = "`$k`";
-            $params[":$k"] = $v;
-        }
-
-        $query = "INSERT INTO cities (" . join(",", $columns) . ") VALUES (" . join(",", array_keys($params)) . ")";
-
         try {
-            $stmt = $db->prepare($query);
-            $stmt->execute($params);
-            flash("City created successfully (ID: " . $db->lastInsertId() . ")", "success");
+            require_once(__DIR__ . "/../../../lib/db_helpers.php");
+            $result = insert("cities", $city);
+            flash("City created successfully (ID: " . $result["lastInsertId"] . ")", "success");
         } catch (PDOException $e) {
             if (str_contains($e->getMessage(), "Duplicate")) {
                 flash("This city already exists in the database", "warning");
