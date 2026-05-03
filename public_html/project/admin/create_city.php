@@ -12,15 +12,56 @@ $city = [];
 
 if (isset($_POST["action"])) {
     $action = $_POST["action"];
+
     $namePrefix = trim(se($_POST, "namePrefix", "", false));
+    $namePrefix = explode(" ", $namePrefix)[0];
 
     if ($action === "fetch") {
         if ($namePrefix) {
             $results = fetch_city($namePrefix);
 
             if (!empty($results)) {
+
                 $city = $results[0];
                 $city["is_api"] = 1;
+
+                $db = getDB();
+
+                // check duplicate using API id
+                if (!empty($city["api_id"])) {
+                    $check = $db->prepare("SELECT id FROM cities WHERE api_id = :api_id");
+                    $check->execute([":api_id" => $city["api_id"]]);
+
+                    if ($check->fetch()) {
+                        flash("City already exists in database", "warning");
+                    } else {
+
+                        $allowed = ["name", "latitude", "longitude", "population", "country_code", "api_id", "is_api"];
+
+                        $insertCity = array_intersect_key($city, array_flip($allowed));
+
+                        $columns = [];
+                        $params = [];
+
+                        foreach ($insertCity as $k => $v) {
+                            $columns[] = "`$k`";
+                            $params[":$k"] = $v;
+                        }
+
+                        $query = "INSERT INTO cities (" . join(",", $columns) . ")
+                              VALUES (" . join(",", array_keys($params)) . ")";
+
+                        try {
+                            $stmt = $db->prepare($query);
+                            $stmt->execute($params);
+
+                            flash("Inserted Record", "success");
+                        } catch (PDOException $e) {
+                            error_log($e);
+                            flash("Error saving city from API", "danger");
+                        }
+                    }
+                }
             } else {
                 flash("No cities found from API", "warning");
             }

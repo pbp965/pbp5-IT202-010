@@ -66,7 +66,7 @@ $country = [];
 
 $query = "SELECT name, code, currency 
           FROM countries 
-          WHERE id = :id AND is_deleted = 0";
+          WHERE id = :id";
 
 try {
     $stmt = $db->prepare($query);
@@ -110,11 +110,6 @@ try {
 
     <br>
 
-    <a href="<?php echo get_url("admin/delete_country.php"); ?>?id=<?php echo $id; ?>"
-       onclick="return confirm('Are you sure you want to delete this country?');"
-       class="btn btn-danger">
-        Delete Country
-    </a>
 </div>
 
 <script>

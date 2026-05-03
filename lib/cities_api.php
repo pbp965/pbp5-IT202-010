@@ -13,7 +13,7 @@
  */
 function fetch_city($namePrefix)
 {
-  $data = ["namePrefix" => $_GET["namePrefix"]];
+  $data = ["namePrefix" => $namePrefix, "sort" => "-population"];
   $endpoint = "https://wft-geo-db.p.rapidapi.com/v1/geo/cities";
   $isRapidAPI = true;
   $rapidAPIHost = "wft-geo-db.p.rapidapi.com";
@@ -54,7 +54,7 @@ function fetch_city($namePrefix)
   if (isset($result["data"])) {
     foreach ($result["data"] as $city) {
 
-      $transformed[] = [
+      $transformedResult[] = [
         "api_id" => $city["id"] ?? null,
         "name" => $city["name"] ?? "",
         "latitude" => isset($city["latitude"]) ? floatval($city["latitude"]) : null,
@@ -70,7 +70,7 @@ function fetch_city($namePrefix)
 
 function search_countries($namePrefix)
 {
-  $data = ["namePrefix" => $_GET["namePrefix"]];
+  $data = ["namePrefix" => $namePrefix];
   $endpoint = "https://wft-geo-db.p.rapidapi.com/v1/geo/countries";
   $isRapidAPI = true;
   $rapidAPIHost = "wft-geo-db.p.rapidapi.com";
@@ -122,10 +122,10 @@ function search_countries($namePrefix)
   // transform data
   $transformed = [];
   if (isset($result["data"])) {
-    foreach ($result["data"] as $city) {
+    foreach ($result["data"] as $country) {
 
       $transformed[] = [
-        "api_id" => $country["code"] ?? null,
+        "api_id" => $country["wikiDataId"] ?? null,
         "name" => $country["name"] ?? "",
         "code" => $country["code"] ?? "",
         "currency" => $country["currencyCodes"][0] ?? null,

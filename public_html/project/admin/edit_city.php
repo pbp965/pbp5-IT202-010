@@ -60,7 +60,7 @@ $city = [];
 
 $query = "SELECT name, latitude, longitude, population, country_code 
           FROM cities 
-          WHERE id = :id AND is_deleted = 0";
+          WHERE id = :id";
 
 try {
     $stmt = $db->prepare($query);
@@ -113,11 +113,6 @@ try {
     </form>
 
     <br>
-    <a href="<?php echo get_url("admin/delete_city.php"); ?>?id=<?php echo $id; ?>"
-       onclick="return confirm('Are you sure you want to delete this city?');"
-       class="btn btn-danger">
-        Delete City
-    </a>
 </div>
 
 <script>

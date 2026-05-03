@@ -8,6 +8,25 @@ if (!has_role("Admin")) {
 
 $db = getDB();
 
+if (isset($_POST["action"]) && $_POST["action"] === "delete") {
+    $id = se($_POST, "id", -1, false);
+
+    if ($id > 0) {
+        $query = "DELETE FROM cities WHERE id = :id";
+
+        try {
+            $stmt = $db->prepare($query);
+            $stmt->execute([":id" => $id]);
+            flash("City deleted successfully", "success");
+        } catch (PDOException $e) {
+            error_log("Delete city error: " . var_export($e, true));
+            flash("Failed to delete city", "danger");
+        }
+    } else {
+        flash("Invalid city id", "warning");
+    }
+}
+
 $name = trim(se($_GET, "name", "", false));
 $country = trim(se($_GET, "country_code", "", false));
 $sort = se($_GET, "sort", "created", false);
@@ -118,12 +137,14 @@ try {
                         <td><?php echo $row["is_api"] ? "API" : "Manual"; ?></td>
 
                         <td>
-                            <a href="<?php echo get_url("admin/view_city.php"); ?>?id=<?php se($row, "id"); ?>">View</a> |
                             <a href="<?php echo get_url("admin/edit_city.php"); ?>?id=<?php se($row, "id"); ?>">Edit</a> |
-                            <a href="<?php echo get_url("admin/delete_city.php"); ?>?id=<?php se($row, "id"); ?>"
-                                onclick="return confirm('Are you sure you want to delete this city?');">
-                                Delete
-                            </a>
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this city?');">
+                                <input type="hidden" name="id" value="<?php se($row, "id"); ?>">
+                                <input type="hidden" name="action" value="delete">
+                                <button type="submit" class="btn btn-link p-0 m-0 align-baseline text-danger">
+                                    Delete
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 <?php endforeach; ?>

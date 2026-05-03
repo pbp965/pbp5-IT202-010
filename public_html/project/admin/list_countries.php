@@ -8,6 +8,25 @@ if (!has_role("Admin")) {
 
 $db = getDB();
 
+if (isset($_POST["action"]) && $_POST["action"] === "delete") {
+    $id = se($_POST, "id", -1, false);
+
+    if ($id > 0) {
+        $query = "DELETE FROM countries WHERE id = :id";
+
+        try {
+            $stmt = $db->prepare($query);
+            $stmt->execute([":id" => $id]);
+            flash("Country deleted successfully", "success");
+        } catch (PDOException $e) {
+            error_log("Delete error: " . var_export($e, true));
+            flash("Failed to delete country", "danger");
+        }
+    } else {
+        flash("Invalid country id", "warning");
+    }
+}
+
 $name = trim(se($_GET, "name", "", false));
 $code = trim(se($_GET, "code", "", false));
 $limit = intval(se($_GET, "limit", 10, false));
@@ -27,7 +46,7 @@ $order = strtolower($order) === "asc" ? "ASC" : "DESC";
 
 $query = "SELECT id, name, code, currency, is_api 
           FROM countries 
-          WHERE 1=1 AND is_deleted = 0";
+          WHERE 1=1";
 
 $params = [];
 
@@ -123,12 +142,14 @@ try {
                         <td><?php echo $row["is_api"] ? "API" : "Manual"; ?></td>
 
                         <td>
-                            <a href="<?php echo get_url("admin/view_country.php"); ?>?id=<?php se($row, "id"); ?>">View</a> |
                             <a href="<?php echo get_url("admin/edit_country.php"); ?>?id=<?php se($row, "id"); ?>">Edit</a> |
-                            <a href="<?php echo get_url("admin/delete_country.php"); ?>?id=<?php se($row, "id"); ?>"
-                               onclick="return confirm('Delete this country?');">
-                               Delete
-                            </a>
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this country?');">
+                                <input type="hidden" name="id" value="<?php se($row, "id"); ?>">
+                                <input type="hidden" name="action" value="delete">
+                                <button type="submit" class="btn btn-link p-0 m-0 align-baseline text-danger">
+                                    Delete
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -138,14 +159,14 @@ try {
 </div>
 
 <script>
-function validateFilter() {
-    let limit = document.querySelector("[name='limit']").value;
-    if (limit < 1 || limit > 100) {
-        alert("Limit must be between 1 and 100");
-        return false;
+    function validateFilter() {
+        let limit = document.querySelector("[name='limit']").value;
+        if (limit < 1 || limit > 100) {
+            alert("Limit must be between 1 and 100");
+            return false;
+        }
+        return true;
     }
-    return true;
-}
 </script>
 
 <?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>
