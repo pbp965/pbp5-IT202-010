@@ -28,9 +28,7 @@ if (isset($_POST["action"])) {
         } else {
             flash("You must provide a country name", "warning");
         }
-    }
-
-    else if ($action === "create") {
+    } else if ($action === "create") {
 
         $allowed = ["name", "code", "currency"];
 
@@ -46,38 +44,21 @@ if (isset($_POST["action"])) {
         error_log("Manual country: " . var_export($countries, true));
     }
 
-    // ===== INSERT =====
     if (count($countries) > 0) {
-        $db = getDB();
+        require_once(__DIR__ . "/../../../lib/db_helpers.php");
 
-        $columns = [];
-        $params = [];
+        // Normalize code/currency to uppercase for each country
+        $records = array_map(function ($country) {
+            if (isset($country["code"]))     $country["code"]     = strtoupper($country["code"]);
+            if (isset($country["currency"])) $country["currency"] = strtoupper($country["currency"]);
+            return $country;
+        }, $countries);
 
-        foreach ($countries[0] as $k => $v) {
-            $columns[] = "`$k`";
-            $params[":$k"] = $v;
-        }
-
-        $query = "INSERT INTO countries (" . join(",", $columns) . ") 
-                  VALUES (" . join(",", array_keys($params)) . ")";
-
-        foreach ($countries as $country) {
-
-            foreach ($country as $k => $v) {
-                $params[":$k"] = $v;
-
-                // normalize
-                if ($k === "code" || $k === "currency") {
-                    $params[":$k"] = strtoupper($v);
-                }
-            }
-
+        foreach ($records as $country) {
             try {
-                $stmt = $db->prepare($query);
-                $stmt->execute($params);
-                flash("Inserted country ID: " . $db->lastInsertId(), "success");
+                $result = insert("countries", $country);
+                flash("Inserted country ID: " . $result["lastInsertId"], "success");
             } catch (PDOException $e) {
-
                 if (str_contains($e->getMessage(), "Duplicate")) {
                     flash("Duplicate country skipped", "warning");
                 } else {
@@ -146,32 +127,32 @@ if (isset($_POST["action"])) {
 </div>
 
 <script>
-function switchTab(tab) {
-    let sections = document.getElementsByClassName("tab-target");
-    for (let s of sections) {
-        s.style.display = (s.id === tab) ? "block" : "none";
+    function switchTab(tab) {
+        let sections = document.getElementsByClassName("tab-target");
+        for (let s of sections) {
+            s.style.display = (s.id === tab) ? "block" : "none";
+        }
     }
-}
 
-function validateFetch() {
-    let name = document.querySelector("[name='namePrefix']").value.trim();
-    if (!name) {
-        alert("Country name is required");
-        return false;
+    function validateFetch() {
+        let name = document.querySelector("[name='namePrefix']").value.trim();
+        if (!name) {
+            alert("Country name is required");
+            return false;
+        }
+        return true;
     }
-    return true;
-}
 
-function validateCreate() {
-    let name = document.querySelector("[name='name']").value.trim();
-    let code = document.querySelector("[name='code']").value.trim();
+    function validateCreate() {
+        let name = document.querySelector("[name='name']").value.trim();
+        let code = document.querySelector("[name='code']").value.trim();
 
-    if (!name || !code) {
-        alert("Name and code are required");
-        return false;
+        if (!name || !code) {
+            alert("Name and code are required");
+            return false;
+        }
+        return true;
     }
-    return true;
-}
 </script>
 
 <?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>
