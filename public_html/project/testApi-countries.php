@@ -1,5 +1,3 @@
-// UCID: pbp5
-// Date: 4/20/2026
 <?php
 require(__DIR__ . "/../../partials/nav.php");
 
@@ -7,7 +5,7 @@ $result = [];
 if (isset($_GET["namePrefix"])) {
     //function=GLOBAL_QUOTE&symbol=MSFT&datatype=json
     $data = ["namePrefix" => $_GET["namePrefix"]];
-    $endpoint = "https://wft-geo-db.p.rapidapi.com/v1/geo/cities";
+    $endpoint = "https://wft-geo-db.p.rapidapi.com/v1/geo/countries";
     $isRapidAPI = true;
     $rapidAPIHost = "wft-geo-db.p.rapidapi.com";
     $result = get($endpoint, "CITIES_API_KEY", $data, $isRapidAPI, $rapidAPIHost);
@@ -15,26 +13,39 @@ if (isset($_GET["namePrefix"])) {
     /* $result = ["status" => 200, "response" => '                    array (
   0 => 
   array (
-    'id' => 123214,
-    'wikiDataId' => 'Q60',
-    'type' => 'CITY',
-    'city' => 'New York City',
-    'name' => 'New York City',
-    'country' => 'United States',
-    'countryCode' => 'US',
-    'region' => 'New York',
-    'regionCode' => 'NY',
-    'regionWdId' => 'Q1384',
-    'latitude' => 40.71427,
-    'longitude' => -74.00597,
-    'population' => 8804190,
+    'code' => 'AE',
+    'currencyCodes' => 
+    array (
+      0 => 'AED',
+    ),
+    'name' => 'United Arab Emirates',
+    'wikiDataId' => 'Q878',
+  ),
+  1 => 
+  array (
+    'code' => 'GB',
+    'currencyCodes' => 
+    array (
+      0 => 'GBP',
+    ),
+    'name' => 'United Kingdom',
+    'wikiDataId' => 'Q145',
+  ),
+  2 => 
+  array (
+    'code' => 'US',
+    'currencyCodes' => 
+    array (
+      0 => 'USD',
+    ),
+    'name' => 'United States',
+    'wikiDataId' => 'Q30',
   ),
 )                
                     array (
   'currentOffset' => 0,
-  'totalCount' => 1,
-)   
-}'];*/
+  'totalCount' => 3,
+) ];*/
     error_log("Response: " . var_export($result, true));
     if (se($result, "status", 400, false) == 200 && isset($result["response"])) {
         $result = json_decode($result["response"], true);
@@ -44,20 +55,20 @@ if (isset($_GET["namePrefix"])) {
 }
 ?>
 <div class="container-fluid">
-    <h1>Cities Info</h1>
+    <h1>Countries Info</h1>
     <p>Remember, we typically won't be frequently calling live data from our API, this is merely a quick sample. We'll want to cache data in our DB to save on API quota.</p>
     <form>
         <div>
-            <label>Cities</label>
+            <label>Countries</label>
             <input name="namePrefix" />
-            <input type="submit" value="Fetch Cities" />
+            <input type="submit" value="Search Countries" />
         </div>
     </form>
     <div class="row ">
         <?php if (isset($result)) : ?>
-            <?php foreach ($result as $city) : ?>
+            <?php foreach ($result as $country) : ?>
                 <pre>
-                    <?php var_export($city); ?>
+                    <?php var_export($country); ?>
                 </pre>
             <?php endforeach; ?>
         <?php endif; ?>
