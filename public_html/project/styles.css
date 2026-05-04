@@ -67,7 +67,6 @@ nav li a:hover {
 
 nav::after {
     text-align: center;
-    content: "(*Edit the hideous css)";
     color:#ffe69c;
 
 }
