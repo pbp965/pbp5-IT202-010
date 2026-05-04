@@ -78,10 +78,10 @@ if (isset($_POST["action"])) {
 
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link bg-success" href="#" onclick="switchTab('fetch')">Fetch</a>
+            <a class="nav-link bg-light" href="#" onclick="switchTab('fetch')">Fetch</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link bg-success" href="#" onclick="switchTab('create')">Create</a>
+            <a class="nav-link bg-light" href="#" onclick="switchTab('create')">Create</a>
         </li>
     </ul>
 
