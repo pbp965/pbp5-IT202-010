@@ -143,6 +143,7 @@ try {
 
                         <td>
                             <a href="<?php echo get_url("admin/edit_country.php"); ?>?id=<?php se($row, "id"); ?>">Edit</a> |
+                            <a href="<?php echo get_url("admin/view_country.php"); ?>?id=<?php se($row, "id"); ?>">View</a> |
                             <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this country?');">
                                 <input type="hidden" name="id" value="<?php se($row, "id"); ?>">
                                 <input type="hidden" name="action" value="delete">
