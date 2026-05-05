@@ -38,7 +38,6 @@ try {
     <div class="card shadow-lg p-4">
         <h3 class="mb-3 text-primary">City Details</h3>
 
-        <!-- ✅ Entity Output -->
         <div class="row mb-2">
             <div class="col-4 fw-bold">ID:</div>
             <div class="col-8"><?php se($city, "id"); ?></div>
