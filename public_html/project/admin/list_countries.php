@@ -142,6 +142,7 @@ try {
                         <td><?php echo $row["is_api"] ? "API" : "Manual"; ?></td>
 
                         <td>
+                            <a href="<?php echo get_url("admin/toggle_favorite_country.php"); ?>?id=<?php se($row, "id"); ?>">Favorite</a> |
                             <a href="<?php echo get_url("admin/edit_country.php"); ?>?id=<?php se($row, "id"); ?>">Edit</a> |
                             <a href="<?php echo get_url("admin/view_country.php"); ?>?id=<?php se($row, "id"); ?>">View</a> |
                             <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this country?');">
