@@ -1,11 +1,9 @@
 <?php
 require(__DIR__ . "/../../../partials/nav.php");
-
-if (!has_role("Admin")) {
-    flash("You don't have permission to view this page", "warning");
-    die(header("Location: " . get_url("landing.php")));
+if (!is_logged_in()) {
+    flash("You must be logged in to view this page", "warning");
+    die(header("Location: login.php"));
 }
-
 $db = getDB();
 
 if (isset($_POST["action"]) && $_POST["action"] === "delete") {
@@ -138,15 +136,19 @@ try {
 
                         <td>
                             <a href="<?php echo get_url("admin/toggle_favorite_city.php"); ?>?id=<?php se($row, "id"); ?>">Favorite</a> |
+                            <?php if (has_role("Admin")) : ?>
                             <a href="<?php echo get_url("admin/edit_city.php"); ?>?id=<?php se($row, "id"); ?>">Edit</a> |
-                            <a href="<?php echo get_url("admin/view_city.php"); ?>?id=<?php se($row, "id"); ?>">View</a> |
-                            <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this city?');">
+                            <?php endif; ?>
+                            <a href="<?php echo get_url("admin/view_city.php"); ?>?id=<?php se($row, "id"); ?>">View</a>
+                            <?php if (has_role("Admin")) : ?>
+                            | <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this city?');">
                                 <input type="hidden" name="id" value="<?php se($row, "id"); ?>">
                                 <input type="hidden" name="action" value="delete">
                                 <button type="submit" class="btn btn-link p-0 m-0 align-baseline text-danger">
                                     Delete
                                 </button>
                             </form>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
