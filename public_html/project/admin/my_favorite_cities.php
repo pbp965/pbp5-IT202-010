@@ -9,9 +9,7 @@ if (!is_logged_in()) {
 $db = getDB();
 $user_id = get_user_id();
 
-/* =========================
-   FILTERS + VALIDATION
-========================= */
+
 $name = trim(se($_GET, "name", "", false));
 $limit = intval(se($_GET, "limit", 10, false));
 $sort = se($_GET, "sort", "name", false);
@@ -22,18 +20,14 @@ if ($limit < 1 || $limit > 100) $limit = 10;
 $allowed_sort = ["name", "population", "created"];
 if (!in_array($sort, $allowed_sort)) $sort = "name";
 
-/* =========================
-   REMOVE ALL FAVORITES
-========================= */
+
 if (isset($_POST["clear_all"])) {
     $stmt = $db->prepare("DELETE FROM favorite_cities WHERE user_id = :uid");
     $stmt->execute([":uid" => $user_id]);
     flash("All favorite cities removed", "success");
 }
 
-/* =========================
-   MAIN QUERY
-========================= */
+
 $query = "
 SELECT c.id, c.name, c.population, c.country_code, fc.created
 FROM favorite_cities fc
@@ -67,9 +61,7 @@ try {
     flash("Error loading favorites", "danger");
 }
 
-/* =========================
-   COUNT
-========================= */
+
 $countStmt = $db->prepare("
 SELECT COUNT(*) as total
 FROM favorite_cities

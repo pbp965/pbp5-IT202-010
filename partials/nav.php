@@ -58,6 +58,8 @@ require(__DIR__ . "/../lib/functions.php");
                                 </li>
                                 <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/assign_favorite_cities.php', true); ?>">Assign Favorite Cities</a>
                                 </li>
+                                <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/unassociated_cities.php', true); ?>">Unassociated Cities</a>
+                                </li>
                             <?php endif; ?>
                             <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/list_cities.php', true); ?>">List Cities</a>
                             </li>
@@ -77,6 +79,8 @@ require(__DIR__ . "/../lib/functions.php");
                                 <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/all_favorite_countries.php', true); ?>">All Favorite Countries</a>
                                 </li>
                                 <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/assign_favorite_countries.php', true); ?>">Assign Favorite Countries</a>
+                                </li>
+                                <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/unassociated_countries.php', true); ?>">Unassociated Countries</a>
                                 </li>
                             <?php endif; ?>
                             <li class="nav-item"><a class="nav-link" aria-current="page" href="<?php get_url('admin/list_countries.php', true); ?>">List Countries</a>
