@@ -82,6 +82,8 @@ require(__DIR__ . "/../lib/functions.php");
                             </li>
                             <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/list_cities.php', true); ?>">List Cities</a>
                             </li>
+                            <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/my_favorite_cities.php', true); ?>">Favorite Cities</a>
+                            </li>
                         </ul>
                     </li>
                 <?php endif; ?>
@@ -96,6 +98,8 @@ require(__DIR__ . "/../lib/functions.php");
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" aria-current="page" href="<?php get_url('admin/list_countries.php', true); ?>">List Countries</a>
+                            </li>
+                            <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/my_favorite_countries.php', true); ?>">Favorite Countries</a>
                             </li>
                         </ul>
                     </li>
