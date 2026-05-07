@@ -83,7 +83,9 @@ try {
         <!-- Navigation -->
         <div class="mt-3">
             <a href="<?php echo get_url("admin/list_cities.php"); ?>" class="btn btn-secondary">Back</a>
+            <?php if (has_role("Admin")) : ?>
             <a href="<?php echo get_url("admin/edit_city.php"); ?>?id=<?php se($city, "id"); ?>" class="btn btn-primary">Edit</a>
+            <?php endif; ?>
             <a href="<?php echo get_url("admin/toggle_favorite_city.php"); ?>?id=<?php se($city, "id"); ?>"class="btn btn-warning">Toggle Favorite</a>
         </div>
     </div>

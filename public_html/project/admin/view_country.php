@@ -75,7 +75,9 @@ try {
         <!-- Navigation -->
         <div class="mt-3">
             <a href="<?php echo get_url("admin/list_countries.php"); ?>" class="btn btn-secondary">Back</a>
+            <?php if (has_role("Admin")) : ?>
             <a href="<?php echo get_url("admin/edit_country.php"); ?>?id=<?php se($country, "id"); ?>" class="btn btn-primary">Edit</a>
+            <?php endif; ?>
             <a href="<?php echo get_url("admin/toggle_favorite_country.php"); ?>?id=<?php se($country, "id"); ?>"class="btn btn-warning">Toggle Favorite</a>
         </div>
     </div>
