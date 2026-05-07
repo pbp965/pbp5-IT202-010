@@ -54,6 +54,10 @@ require(__DIR__ . "/../lib/functions.php");
                             <?php if (has_role("Admin")) : ?>
                                 <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/create_city.php', true); ?>">Create City</a>
                                 </li>
+                                <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/all_favorite_cities.php', true); ?>">All Favorite Cities</a>
+                                </li>
+                                <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/assign_favorite_cities.php', true); ?>">Assign Favorite City</a>
+                                </li>
                             <?php endif; ?>
                             <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/list_cities.php', true); ?>">List Cities</a>
                             </li>
