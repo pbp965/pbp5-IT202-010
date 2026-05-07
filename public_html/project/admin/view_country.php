@@ -2,9 +2,9 @@
 require(__DIR__ . "/../../../partials/nav.php");
 
 
-if (!has_role("Admin")) {
-    flash("You don't have permission to view this page", "warning");
-    die(header("Location: " . get_url("landing.php")));
+if (!is_logged_in()) {
+    flash("You must be logged in to view this page", "warning");
+    die(header("Location: login.php"));
 }
 
 $id = se($_GET, "id", -1, false);
@@ -75,7 +75,9 @@ try {
         <!-- Navigation -->
         <div class="mt-3">
             <a href="<?php echo get_url("admin/list_countries.php"); ?>" class="btn btn-secondary">Back</a>
+            <?php if (has_role("Admin")) : ?>
             <a href="<?php echo get_url("admin/edit_country.php"); ?>?id=<?php se($country, "id"); ?>" class="btn btn-primary">Edit</a>
+            <?php endif; ?>
             <a href="<?php echo get_url("admin/toggle_favorite_country.php"); ?>?id=<?php se($country, "id"); ?>"class="btn btn-warning">Toggle Favorite</a>
         </div>
     </div>
