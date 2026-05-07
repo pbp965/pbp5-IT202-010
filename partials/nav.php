@@ -46,6 +46,45 @@ require(__DIR__ . "/../lib/functions.php");
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="<?php get_url('profile.php', true); ?>">Profile</a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Cities
+                        </a>
+                        <ul class="dropdown-menu">
+                            <?php if (has_role("Admin")) : ?>
+                                <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/create_city.php', true); ?>">Create City</a>
+                                </li>
+                                <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/all_favorite_cities.php', true); ?>">All Favorite Cities</a>
+                                </li>
+                                <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/assign_favorite_cities.php', true); ?>">Assign Favorite Cities</a>
+                                </li>
+                            <?php endif; ?>
+                            <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/list_cities.php', true); ?>">List Cities</a>
+                            </li>
+                            <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/my_favorite_cities.php', true); ?>">Favorite Cities</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Countries
+                        </a>
+                        <ul class="dropdown-menu">
+                            <?php if (has_role("Admin")) : ?>
+                                <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="<?php get_url('admin/create_country.php', true); ?>">Create Country</a>
+                                </li>
+                                <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/all_favorite_countries.php', true); ?>">All Favorite Countries</a>
+                                </li>
+                                <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/assign_favorite_countries.php', true); ?>">Assign Favorite Countries</a>
+                                </li>
+                            <?php endif; ?>
+                            <li class="nav-item"><a class="nav-link" aria-current="page" href="<?php get_url('admin/list_countries.php', true); ?>">List Countries</a>
+                            </li>
+                            <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/my_favorite_countries.php', true); ?>">Favorite Countries</a>
+                            </li>
+                        </ul>
+                    </li>
                 <?php endif; ?>
                 <?php if (!is_logged_in()) : ?>
                     <li class="nav-item">
@@ -69,34 +108,6 @@ require(__DIR__ . "/../lib/functions.php");
                             <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/assign_roles.php', true); ?>">Assign Roles</a>
                             </li>
 
-                        </ul>
-                    </li>
-                <?php endif; ?>
-                <?php if (has_role("Admin")) : ?>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Cities
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/create_city.php', true); ?>">Create City</a>
-                            </li>
-                            <li><a class="dropdown-item" aria-current="page" href="<?php get_url('admin/list_cities.php', true); ?>">List Cities</a>
-                            </li>
-                        </ul>
-                    </li>
-                <?php endif; ?>
-                <?php if (has_role("Admin")) : ?>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Countries
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="<?php get_url('admin/create_country.php', true); ?>">Create Country</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="<?php get_url('admin/list_countries.php', true); ?>">List Countries</a>
-                            </li>
                         </ul>
                     </li>
                 <?php endif; ?>
